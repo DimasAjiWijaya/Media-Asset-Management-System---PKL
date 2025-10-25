@@ -91,11 +91,15 @@ $docs   = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as c FROM medi
 
     <hr>
     <div class="grup1">
-      <div class="tmb"><a href="upload.php">📤 Upload Media</a></div>
-      <div class="tmb"><a href="list_media.php">📂 Daftar Media</a></div>
-      <div class="tmb"><a href="categories.php">📝 Kelola Kategori</a></div>
-      <div class="tmb"><a href="trash.php">🗑️ Trash</a></div>
-    </div>
+  <div class="tmb"><a href="upload.php">Upload Media</a></div>
+  <div class="tmb"><a href="list_media.php">Daftar Media</a></div>
+
+  <?php if (is_admin()): ?>
+    <div class="tmb"><a href="categories.php">Kelola Kategori</a></div>
+    <div class="tmb"><a href="trash.php">Trash</a></div>
+  <?php endif; ?>
+</div>
+
   </div>
 </body>
 </html>

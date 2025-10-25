@@ -14,10 +14,17 @@ if($tag !== '') $where .= " AND tags LIKE '%" . mysqli_real_escape_string($conn,
 $res = mysqli_query($conn, "SELECT m.*, c.name AS category_name, u.username FROM media m LEFT JOIN categories c ON c.id=m.category_id LEFT JOIN users u ON u.id=m.uploaded_by $where ORDER BY m.id DESC");
 $catRes = mysqli_query($conn, "SELECT id,name FROM categories ORDER BY name ASC");
 ?>
-<!doctype html><html><head><meta charset="utf-8"><title>Daftar Media</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"></head><body style="background-color: #DDE6ED;">
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Daftar Media</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body style="background-color: #DDE6ED;">
 <div class="container mt-4">
   <h4>Daftar Media</h4>
+
   <form class="row g-2 mb-3">
     <div class="col-md-3"><input class="form-control" name="q" value="<?= e($q) ?>" placeholder="Cari judul/deskripsi"></div>
     <div class="col-md-3">
@@ -32,11 +39,17 @@ $catRes = mysqli_query($conn, "SELECT id,name FROM categories ORDER BY name ASC"
     <div class="col-md-3 d-grid"><button class="btn btn-primary">Filter</button></div>
   </form>
 
-  <?php if($m = get_flash()): ?><div class="alert alert-success"><?= e($m) ?></div><?php endif; ?>
+  <?php if($m = get_flash()): ?>
+    <div class="alert alert-success"><?= e($m) ?></div>
+  <?php endif; ?>
 
   <div class="table-responsive">
     <table class="table table-hover align-middle">
-      <thead><tr><th>#</th><th>Preview</th><th>Judul</th><th>Kategori</th><th>Tags</th><th>Uploader</th><th>Waktu</th><th>Aksi</th></tr></thead>
+      <thead>
+        <tr>
+          <th>#</th><th>Preview</th><th>Judul</th><th>Kategori</th><th>Tags</th><th>Uploader</th><th>Waktu</th><th>Aksi</th>
+        </tr>
+      </thead>
       <tbody>
         <?php while($r = mysqli_fetch_assoc($res)): ?>
           <tr>
@@ -56,9 +69,11 @@ $catRes = mysqli_query($conn, "SELECT id,name FROM categories ORDER BY name ASC"
             <td><?= e($r['username']) ?></td>
             <td><?= e($r['uploaded_at']) ?></td>
             <td>
-              <a class="btn btn-sm btn-primary" href="view_media.php?id=<?= e($r['id']) ?>">Lihat</a>
-              <a class="btn btn-sm btn-warning" href="edit_media.php?id=<?= e($r['id']) ?>">Edit</a>
-              <a class="btn btn-sm btn-danger" href="trash.php?soft_delete=<?= e($r['id']) ?>" onclick="return confirm('Pindahkan ke trash?')">Trash</a>
+              <a href="view_media.php?id=<?= e($r['id']) ?>" class="btn btn-sm btn-info">Lihat</a>
+              <?php if (is_admin()): ?>
+              <a href="edit_media.php?id=<?= e($r['id']) ?>" class="btn btn-sm btn-warning">Edit</a>
+              <?php endif; ?>
+              <a href="trash.php?soft_delete=<?= e($r['id']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin membuang?')">Trash</a>
             </td>
           </tr>
         <?php endwhile; ?>
@@ -71,4 +86,5 @@ $catRes = mysqli_query($conn, "SELECT id,name FROM categories ORDER BY name ASC"
     <a href="dashboard.php" class="btn btn-primary">Kembali</a>
   </div>
 </div>
-</body></html>
+</body>
+</html>

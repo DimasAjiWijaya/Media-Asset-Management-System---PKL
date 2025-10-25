@@ -59,4 +59,25 @@ function redirect($url){
     header('Location: ' . $url);
     exit;
 }
+
+function current_role() {
+    return $_SESSION['role'] ?? null;
+}
+
+function require_role($roles) {
+    $role = current_role();
+    if (!$role || !in_array($role, (array)$roles)) {
+        header('Location: dashboard.php');
+        exit;
+    }
+}
+
+function is_admin() {
+    return (current_role() === 'admin');
+}
+
+function is_user() {
+    return (current_role() === 'user');
+}
+
 ?>
